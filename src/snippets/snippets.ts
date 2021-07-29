@@ -1,6 +1,7 @@
 import {memoize} from '@exadel/esl/modules/esl-utils/decorators/memoize';
 import {bind} from '@exadel/esl/modules/esl-utils/decorators/bind';
 import {UIPPlugin} from '../core/plugin';
+import {CSSClassUtils} from '@exadel/esl';
 
 export class UIPSnippets extends UIPPlugin {
   public static is = 'uip-snippets';
@@ -53,8 +54,9 @@ export class UIPSnippets extends UIPPlugin {
   protected rerender(): void {
     const snippets = this.querySelectorAll(UIPSnippets.CONTENT_SEL);
     if (!snippets.length) return;
+    if (snippets.length === 1) CSSClassUtils.add(this, 'hidden');
     const $ul = document.createElement('ul');
-    $ul.className = 'snippets-list esl-scrollable-content';
+    CSSClassUtils.add($ul, 'snippets-list esl-scrollable-content');
 
     Array.from(snippets)
       .map((snippet: HTMLTemplateElement) => this.buildListItem(snippet))
@@ -70,7 +72,7 @@ export class UIPSnippets extends UIPPlugin {
     if (!label) return;
 
     const $li = document.createElement('li');
-    $li.classList.add(UIPSnippets.ITEM_CLASS);
+    CSSClassUtils.add($li, UIPSnippets.ITEM_CLASS);
     $li.textContent = label;
     $li.appendChild(snippet);
     return $li;
